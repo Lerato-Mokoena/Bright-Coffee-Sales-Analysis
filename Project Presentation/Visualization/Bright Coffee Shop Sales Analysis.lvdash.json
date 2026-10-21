@@ -1,0 +1,2060 @@
+{
+  "datasets": [
+    {
+      "name": "8ffad2c0",
+      "displayName": "Bright Coffee dataset",
+      "queryLines": [
+        "SELECT \r\n",
+        "    transaction_date,\r\n",
+        "    DAYNAME(transaction_date) AS Day_name,\r\n",
+        "    MONTHNAME(transaction_date) AS Month_name,\r\n",
+        "     COUNT(transaction_id) AS number_of_sales,\r\n",
+        "     SUM(transaction_qty) AS units_sold,\r\n",
+        "     COUNT(DISTINCT product_id) AS unique_products,\r\n",
+        "     COUNT(store_id) AS number_of_stores,\r\n",
+        "     MAX(unit_price*transaction_qty) AS highest_price,\r\n",
+        "     AVG(unit_price*transaction_qty) AS average_price,\r\n",
+        "     MIN(unit_price*transaction_qty) AS lowest_price,\r\n",
+        "     AVG(unit_price*transaction_qty) AS average_revenue,\r\n",
+        "     SUM(transaction_qty * unit_price) AS revenue,\r\n",
+        "\r\n",
+        "    CASE \r\n",
+        "        WHEN DAYNAME(transaction_date) IN ('Sat','Sun') THEN 'Weekend'\r\n",
+        "        WHEN DAYNAME(transaction_date) IN ('Mon','Tue','Wed','Thu','Fri') THEN 'Weekday'\r\n",
+        "    END AS day_classification,\r\n",
+        "\r\n",
+        "    CASE \r\n",
+        "        WHEN transaction_time BETWEEN '06:00:00' AND '11:59:59' THEN 'Morning'\r\n",
+        "        WHEN transaction_time BETWEEN '12:00:00' AND '17:59:59' THEN 'Afternoon'\r\n",
+        "        WHEN transaction_time BETWEEN '18:00:00' AND '20:59:59' THEN 'Evening'\r\n",
+        "    END AS time_classification,  \r\n",
+        "\r\n",
+        "    CASE\r\n",
+        "         WHEN transaction_date BETWEEN '2023-01-01' AND '2023-03-31' THEN 'first_quarter_revenue'\r\n",
+        "         WHEN transaction_date BETWEEN '2023-04-01' AND '2023-06-30' THEN 'second_quarter_revenue'\r\n",
+        "         END AS revenue_by_quarter,\r\n",
+        "\r\n",
+        "         SUM(transaction_qty * unit_price) AS total_revenue,\r\n",
+        "\r\n",
+        "    store_location,\r\n",
+        "    product_category,\r\n",
+        "    product_type,\r\n",
+        "    product_detail\r\n",
+        "\r\n",
+        "FROM brightlearn.coffee_shop.bright_coffee_shop_sales_dataset\r\n",
+        "\r\n",
+        "GROUP BY \r\n",
+        "    transaction_date,\r\n",
+        "    month_name,\r\n",
+        "    store_location,\r\n",
+        "    product_category,\r\n",
+        "    product_type,\r\n",
+        "    product_detail,\r\n",
+        "\r\n",
+        "    CASE \r\n",
+        "        WHEN DAYNAME(transaction_date) IN ('Sat','Sun') THEN 'Weekend'\r\n",
+        "        WHEN DAYNAME(transaction_date) IN ('Mon','Tue','Wed','Thu','Fri') THEN 'Weekday'\r\n",
+        "    END,\r\n",
+        "\r\n",
+        "    CASE \r\n",
+        "        WHEN transaction_time BETWEEN '06:00:00' AND '11:59:59' THEN 'Morning'\r\n",
+        "        WHEN transaction_time BETWEEN '12:00:00' AND '17:59:59'  THEN 'Afternoon'\r\n",
+        "        WHEN transaction_time BETWEEN '18:00:00' AND '20:59:59' THEN 'Evening'\r\n",
+        "        END,\r\n",
+        "\r\n",
+        "        CASE\r\n",
+        "         WHEN transaction_date BETWEEN '2023-01-01' AND '2023-03-31' THEN 'first_quarter_revenue'\r\n",
+        "         WHEN transaction_date BETWEEN '2023-04-01' AND '2023-06-30' THEN 'second_quarter_revenue'\r\n",
+        "    END;\r\n",
+        "\r\n",
+        "     \r\n",
+        "    "
+      ]
+    }
+  ],
+  "pages": [
+    {
+      "name": "cover",
+      "displayName": "Cover Page",
+      "layout": [
+        {
+          "widget": {
+            "name": "cover_hero",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size:46px;line-height:1.4;color:#F5E6D3;font-weight:bold;font-family:Georgia, serif;\">☕ BRIGHT COFFEE</span><span style=\"display:block;font-size:20px;color:#D7A86E;margin-top:8px;letter-spacing:3px;\">SALES ANALYSIS · JANUARY – JUNE 2023</span></span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#3E2723",
+                "dark": "#2B1B16"
+              },
+              "widgetBorderColor": {
+                "light": "#3E2723",
+                "dark": "#2B1B16"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "cover_card_overview",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 📊 Overview\n",
+                "\n",
+                "This dashboard analyzes **Bright Coffee Shop** sales across **January – June 2023**.\n",
+                "\n",
+                "Explore revenue, units sold, and transaction patterns across:\n",
+                "\n",
+                "* **3** store locations\n",
+                "* Multiple **product categories** & types\n",
+                "* Times of day, weekdays & weekends\n",
+                "* Months and quarters\n",
+                "\n",
+                "Use the filters on the **Dashboard page** to slice the data any way you like."
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              },
+              "widgetBorderColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cover_card_metrics",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 🎯 Key Metrics\n",
+                "\n",
+                "| Metric | Description |\n",
+                "| --- | --- |\n",
+                "| **Total Revenue** | Monetary value of all sales |\n",
+                "| **Units Sold** | Total quantity of products sold |\n",
+                "| **Number of Sales** | Count of individual transactions |\n",
+                "\n",
+                "These three headline metrics appear live across the **Dashboard** and **Detailed View** pages."
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              },
+              "widgetBorderColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              }
+            }
+          },
+          "position": {
+            "x": 4,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cover_card_guide",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## 🧭 Page Guide\n",
+                "\n",
+                "| Page | Content |\n",
+                "| --- | --- |\n",
+                "| **Dashboard** | Interactive analytics with filters |\n",
+                "| **Detailed View** | Pivot tables & granular breakdowns |\n",
+                "| **Glossary** | Metric & term definitions |\n",
+                "\n",
+                "Start on the **Dashboard** page, then dive deeper in the **Detailed View**."
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              },
+              "widgetBorderColor": {
+                "light": "#FCF6F0",
+                "dark": "#241A16"
+              }
+            }
+          },
+          "position": {
+            "x": 8,
+            "y": 2,
+            "width": 4,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "cover_footer",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;color:#F5E6D3;font-size:16px;\">💡 <b>Tip:</b> Use the filters on the <b>Dashboard page</b> to explore by date range, store location, product category, and product type.</span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#6F4E37",
+                "dark": "#6F4E37"
+              },
+              "widgetBorderColor": {
+                "light": "#6F4E37",
+                "dark": "#6F4E37"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 8,
+            "width": 12,
+            "height": 2
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "ea513695",
+      "displayName": "Dashboard",
+      "layout": [
+        {
+          "widget": {
+            "name": "6db1e5ad",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">BRIGHT COFFEE SALES ANALYSIS</span></span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#4686B9"
+              },
+              "widgetBorderColor": {
+                "light": "#FFFFFF"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "total-revenue-month",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "Month_name",
+                      "expression": "`Month_name`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">**Total Revenue of the Month**</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 5
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Month_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": false
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 5,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "22e7efea",
+            "queries": [
+              {
+                "name": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_transaction_date",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "transaction_date",
+                      "expression": "`transaction_date`"
+                    },
+                    {
+                      "name": "transaction_date_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "selection": {
+                "defaultSelection": {
+                  "range": {
+                    "dataType": "DATE",
+                    "min": {
+                      "value": "2023-01-01T00:00:00.000"
+                    },
+                    "max": {
+                      "value": "2023-06-30T23:59:59.999"
+                    }
+                  }
+                }
+              },
+              "frame": {
+                "showTitle": true,
+                "showDescription": false
+              },
+              "widgetType": "filter-date-range-picker",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "transaction_date",
+                    "queryName": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_transaction_date"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 2,
+            "width": 5,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "213d5bb2",
+            "queries": [
+              {
+                "name": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_store_location",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    },
+                    {
+                      "name": "store_location_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "store_location",
+                    "queryName": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_store_location"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 4,
+            "width": 5,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "82cd3029",
+            "queries": [
+              {
+                "name": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_product_category",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "product_category_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_category",
+                    "queryName": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_product_category"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 7,
+            "y": 3,
+            "width": 5,
+            "height": 1
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_total_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Total Revenue",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(total_revenue)",
+                  "rowNumber": 0,
+                  "format": {
+                    "type": "number-currency",
+                    "currencyCode": "ZAR",
+                    "abbreviation": "none"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 3,
+            "height": 3
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_units_sold",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(units_sold)",
+                      "expression": "SUM(`units_sold`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Units Sold",
+                  "fields": []
+                }
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(units_sold)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "counter_num_sales",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(number_of_sales)",
+                      "expression": "SUM(`number_of_sales`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Number of Sales"
+              },
+              "version": 2,
+              "widgetType": "counter",
+              "encodings": {
+                "value": {
+                  "fieldName": "sum(number_of_sales)",
+                  "rowNumber": 0
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 5,
+            "y": 2,
+            "width": 2,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "pie_revenue_category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Revenue by Product Category</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_category",
+                  "displayName": "product_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 5,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "line_daily_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "daily(transaction_date)",
+                      "expression": "DATE_TRUNC(\"DAY\", `transaction_date`)"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Daily Revenue Trend</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "daily(transaction_date)",
+                  "displayName": "Day",
+                  "scale": {
+                    "type": "temporal"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 11,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_revenue_dayofweek",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    },
+                    {
+                      "name": "day_classification",
+                      "expression": "`day_classification`"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`time_classification` IN (`time_classification`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "showDescription": false,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">**Weekday vs Weekend Revenue**</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(total_revenue)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "total_revenue"
+                },
+                "color": {
+                  "fieldName": "day_classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 16,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_revenue_timeofday",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "time_classification",
+                      "expression": "`time_classification`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">**Revenue by Time of Day**</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "time_classification",
+                  "displayName": "time_classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "time_classification",
+                  "displayName": "time_classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 16,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "bar_revenue_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    },
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">Revenue by Store Location</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "pie",
+              "encodings": {
+                "angle": {
+                  "fieldName": "sum(total_revenue)",
+                  "scale": {
+                    "type": "quantitative"
+                  },
+                  "displayName": "total_revenue"
+                },
+                "color": {
+                  "fieldName": "store_location",
+                  "displayName": "store_location",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 11,
+            "width": 6,
+            "height": 5
+          }
+        },
+        {
+          "widget": {
+            "name": "units-sold-by-product-category",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "sum(units_sold)",
+                      "expression": "SUM(`units_sold`)"
+                    },
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "<span style=\"text-align:center;display:block;\">**Units sold by Product Category**</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "sum(units_sold)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_category",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "b9365b96",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "revenue_by_quarter",
+                      "expression": "`revenue_by_quarter`"
+                    },
+                    {
+                      "name": "count(revenue_by_quarter)",
+                      "expression": "COUNT(`revenue_by_quarter`)"
+                    }
+                  ],
+                  "filters": [
+                    {
+                      "expression": "`revenue_by_quarter` IN (`revenue_by_quarter`) OR TRUE"
+                    },
+                    {
+                      "expression": "`units_sold` IN (`units_sold`) OR TRUE"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": false,
+                "showDescription": true,
+                "description": {
+                  "value": "<span style=\"text-align:center;display:block;\">**Units Sold by Quarter**</span>",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 2
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "revenue_by_quarter",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "count(revenue_by_quarter)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "label": {
+                  "show": true
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 21,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "4aeeabb7",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_type",
+                      "expression": "`product_type`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Top 10 Product Types by Revenue",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_type",
+                  "displayName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "product_type",
+                  "displayName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 27,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "average-price-product-type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "avg(average_price)",
+                      "expression": "AVG(`average_price`)"
+                    },
+                    {
+                      "name": "product_type",
+                      "expression": "`product_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "**Average Price by Product Type**",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "avg(average_price)",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 27,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "975cf7fc",
+            "queries": [
+              {
+                "name": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_product_type",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_type",
+                      "expression": "`product_type`"
+                    },
+                    {
+                      "name": "product_type_associativity",
+                      "expression": "COUNT_IF(`associative_filter_predicate_group`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "version": 2,
+              "frame": {
+                "showTitle": true
+              },
+              "widgetType": "filter-single-select",
+              "encodings": {
+                "fields": [
+                  {
+                    "fieldName": "product_type",
+                    "queryName": "dashboards/01f1c3417e5c1948b07e1e7fdaccd6f3/datasets/01f1c343896a16a494311494cce93dad_product_type"
+                  }
+                ]
+              }
+            }
+          },
+          "position": {
+            "x": 3,
+            "y": 4,
+            "width": 4,
+            "height": 1
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "detailed_view",
+      "displayName": "Detailed View",
+      "layout": [
+        {
+          "widget": {
+            "name": "dv_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">DETAILED VIEW</span></span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#4686B9"
+              },
+              "widgetBorderColor": {
+                "light": "#FFFFFF"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_pivot_cat_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "product_category"
+                        ]
+                      },
+                      {
+                        "fieldNames": [
+                          "store_location"
+                        ]
+                      }
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "direction": "ASC",
+                      "expression": "`store_location`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Revenue by Category × Store"
+              },
+              "version": 3,
+              "widgetType": "pivot",
+              "encodings": {
+                "rows": [
+                  {
+                    "fieldName": "product_category"
+                  }
+                ],
+                "columns": [
+                  {
+                    "fieldName": "store_location"
+                  }
+                ],
+                "cell": {
+                  "type": "single-cell",
+                  "fieldName": "sum(total_revenue)",
+                  "cellType": "text"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_top_products",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_type",
+                      "expression": "`product_type`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Top Product Types by Revenue"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "product_type",
+                  "displayName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "product_type",
+                  "displayName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_avg_price_type",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "avg(average_price)",
+                      "expression": "AVG(`average_price`)"
+                    },
+                    {
+                      "name": "product_type",
+                      "expression": "`product_type`"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": {
+                  "value": "Average Price by Product Type",
+                  "fields": []
+                }
+              },
+              "version": 3,
+              "mark": {
+                "colors": [
+                  {
+                    "themeColorType": "visualizationColors",
+                    "position": 3
+                  }
+                ]
+              },
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "avg(average_price)",
+                  "displayName": "average_price",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "y": {
+                  "fieldName": "product_type",
+                  "displayName": "product_type",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_quarter_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "revenue_by_quarter",
+                      "expression": "`revenue_by_quarter`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Revenue by Quarter"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "revenue_by_quarter",
+                  "displayName": "revenue_by_quarter",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "revenue_by_quarter",
+                  "displayName": "revenue_by_quarter",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_dayofweek_revenue",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "day_classification",
+                      "expression": "`day_classification`"
+                    },
+                    {
+                      "name": "Day_name",
+                      "expression": "`Day_name`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Revenue by Day of Week"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "Day_name",
+                  "displayName": "Day_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "day_classification",
+                  "displayName": "day_classification",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 15,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_monthly_store_line",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    },
+                    {
+                      "name": "Month_name",
+                      "expression": "`Month_name`"
+                    },
+                    {
+                      "name": "sum(total_revenue)",
+                      "expression": "SUM(`total_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Monthly Revenue by Store"
+              },
+              "version": 3,
+              "widgetType": "line",
+              "encodings": {
+                "x": {
+                  "fieldName": "Month_name",
+                  "displayName": "Month_name",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "sum(total_revenue)",
+                  "displayName": "total_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_location",
+                  "displayName": "store_location",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 15,
+            "width": 6,
+            "height": 6
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_units_cat_store_pivot",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "product_category",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    },
+                    {
+                      "name": "sum(units_sold)",
+                      "expression": "SUM(`units_sold`)"
+                    }
+                  ],
+                  "cubeGroupingSets": {
+                    "sets": [
+                      {
+                        "fieldNames": [
+                          "product_category"
+                        ]
+                      },
+                      {
+                        "fieldNames": [
+                          "store_location"
+                        ]
+                      }
+                    ]
+                  },
+                  "disaggregated": false,
+                  "orders": [
+                    {
+                      "direction": "ASC",
+                      "expression": "`product_category`"
+                    },
+                    {
+                      "direction": "ASC",
+                      "expression": "`store_location`"
+                    }
+                  ]
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Units Sold by Category × Store"
+              },
+              "version": 3,
+              "widgetType": "pivot",
+              "encodings": {
+                "rows": [
+                  {
+                    "fieldName": "product_category"
+                  }
+                ],
+                "columns": [
+                  {
+                    "fieldName": "store_location"
+                  }
+                ],
+                "cell": {
+                  "type": "single-cell",
+                  "fieldName": "sum(units_sold)",
+                  "cellType": "text"
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 21,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "dv_avg_revenue_store",
+            "queries": [
+              {
+                "name": "main_query",
+                "query": {
+                  "datasetName": "8ffad2c0",
+                  "fields": [
+                    {
+                      "name": "store_location",
+                      "expression": "`store_location`"
+                    },
+                    {
+                      "name": "avg(average_revenue)",
+                      "expression": "AVG(`average_revenue`)"
+                    }
+                  ],
+                  "disaggregated": false
+                }
+              }
+            ],
+            "spec": {
+              "frame": {
+                "showTitle": true,
+                "title": "Average Revenue by Store Location"
+              },
+              "version": 3,
+              "widgetType": "bar",
+              "encodings": {
+                "x": {
+                  "fieldName": "store_location",
+                  "displayName": "store_location",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                },
+                "y": {
+                  "fieldName": "avg(average_revenue)",
+                  "displayName": "average_revenue",
+                  "scale": {
+                    "type": "quantitative"
+                  }
+                },
+                "color": {
+                  "fieldName": "store_location",
+                  "displayName": "store_location",
+                  "scale": {
+                    "type": "categorical"
+                  }
+                }
+              },
+              "data": {
+                "queryName": "main_query"
+              }
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 21,
+            "width": 6,
+            "height": 7
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    },
+    {
+      "name": "9c49367d",
+      "displayName": "Glossary",
+      "layout": [
+        {
+          "widget": {
+            "name": "glossary_header",
+            "multilineTextboxSpec": {
+              "lines": [
+                "<span style=\"text-align:center;display:block;\"><span style=\"font-size: 48px;line-height: 1.5;\">GLOSSARY</span></span>"
+              ]
+            },
+            "specExtensions": {
+              "widgetBackgroundColor": {
+                "light": "#4686B9"
+              },
+              "widgetBorderColor": {
+                "light": "#FFFFFF"
+              }
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 0,
+            "width": 12,
+            "height": 2
+          }
+        },
+        {
+          "widget": {
+            "name": "glossary_revenue_metrics",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Revenue Metrics\n",
+                "\n",
+                "| Term | Definition |\n",
+                "| --- | --- |\n",
+                "| **Total Revenue** | The total monetary value of all sales, calculated as `SUM(transaction_qty × unit_price)`. |\n",
+                "| **Revenue** | Same calculation as Total Revenue — `SUM(transaction_qty × unit_price)`. |\n",
+                "| **Average Revenue** | The average revenue per transaction, calculated as `AVG(unit_price × transaction_qty)`. |\n",
+                "| **Average Price** | The average transaction value, calculated as `AVG(unit_price × transaction_qty)`. |\n",
+                "| **Highest Price** | The maximum single-transaction value, calculated as `MAX(unit_price × transaction_qty)`. |\n",
+                "| **Lowest Price** | The minimum single-transaction value, calculated as `MIN(unit_price × transaction_qty)`. |"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "glossary_sales_metrics",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Sales & Transaction Metrics\n",
+                "\n",
+                "| Term | Definition |\n",
+                "| --- | --- |\n",
+                "| **Units Sold** | The total quantity of products sold, calculated as `SUM(transaction_qty)`. |\n",
+                "| **Number of Sales** | The total count of transactions, calculated as `COUNT(transaction_id)`. |\n",
+                "| **Unique Products** | The count of distinct product IDs sold, calculated as `COUNT(DISTINCT product_id)`. |\n",
+                "| **Number of Stores** | The total count of stores involved in transactions, calculated as `COUNT(store_id)`. |\n",
+                "| **Transaction Date** | The date on which a sales transaction occurred. |"
+              ]
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 2,
+            "width": 6,
+            "height": 7
+          }
+        },
+        {
+          "widget": {
+            "name": "glossary_time_classifications",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Time Classifications\n",
+                "\n",
+                "| Term | Definition |\n",
+                "| --- | --- |\n",
+                "| **Day Name** | The name of the day of the week extracted from the transaction date (e.g., Monday, Saturday). |\n",
+                "| **Month Name** | The name of the month extracted from the transaction date (e.g., January, June). |\n",
+                "| **Day Classification** | Categorises each day as **Weekday** (Mon–Fri) or **Weekend** (Sat–Sun). |\n",
+                "| **Time Classification** | Categorises transactions by time of day: **Morning** (06:00–11:59), **Afternoon** (12:00–17:59), or **Evening** (18:00–20:59). |\n",
+                "| **Revenue by Quarter** | Groups revenue into quarters: **First Quarter** (Jan–Mar 2023) and **Second Quarter** (Apr–Jun 2023). |"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 9,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "glossary_product_store",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Product & Store Dimensions\n",
+                "\n",
+                "| Term | Definition |\n",
+                "| --- | --- |\n",
+                "| **Store Location** | The physical location of the coffee shop where the transaction took place. |\n",
+                "| **Product Category** | The broad classification of products (e.g., Coffee, Tea, Bakery). |\n",
+                "| **Product Type** | The specific type within a product category (e.g., Gourmet Coffee, Herbal Tea). |\n",
+                "| **Product Detail** | The most granular description of the individual product sold. |"
+              ]
+            }
+          },
+          "position": {
+            "x": 6,
+            "y": 9,
+            "width": 6,
+            "height": 8
+          }
+        },
+        {
+          "widget": {
+            "name": "glossary_chart_filter_terms",
+            "multilineTextboxSpec": {
+              "lines": [
+                "## Chart & Filter Terms\n",
+                "\n",
+                "| Term | Definition |\n",
+                "| --- | --- |\n",
+                "| **Daily Revenue Trend** | A line chart displaying total revenue aggregated by day, showing the revenue trend over time. |\n",
+                "| **Date Range Filter** | A filter allowing users to narrow the dashboard data to a specific date range. |\n",
+                "| **Store Location Filter** | A single-select dropdown filter to filter dashboard data by a specific store location. |\n",
+                "| **Product Category Filter** | A single-select dropdown filter to filter dashboard data by a specific product category. |\n",
+                "| **Product Type Filter** | A single-select dropdown filter to filter dashboard data by a specific product type. |"
+              ]
+            }
+          },
+          "position": {
+            "x": 0,
+            "y": 17,
+            "width": 12,
+            "height": 6
+          }
+        }
+      ],
+      "pageType": "PAGE_TYPE_CANVAS",
+      "layoutVersion": "GRID_V1"
+    }
+  ],
+  "uiSettings": {
+    "theme": {
+      "canvasBackgroundColor": {
+        "light": "#F4F2ED",
+        "dark": "#1F1E1D"
+      },
+      "widgetBackgroundColor": {
+        "light": "#EBE9E2",
+        "dark": "#1B1817"
+      },
+      "widgetBorderColor": {
+        "light": "#D5CEC3",
+        "dark": "#2F2E2B"
+      },
+      "fontColor": {
+        "light": "#3D3C39",
+        "dark": "#FAFBF9"
+      },
+      "selectionColor": {
+        "light": "#5F7E52",
+        "dark": "#7A8F3E"
+      },
+      "visualizationColors": [
+        "#1A4F27",
+        "#B35900",
+        "#3A9BDC",
+        "#7A8F3E",
+        "#E8B200",
+        "#767676",
+        "#C23B22"
+      ],
+      "widgetHeaderAlignment": "LEFT"
+    },
+    "applyModeEnabled": false
+  }
+}
